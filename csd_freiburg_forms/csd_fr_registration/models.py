@@ -136,7 +136,10 @@ class Applicant(models.Model):
 
 
 class ApplicantPosted(models.Model):
-    applicant = models.OneToOneField(Applicant, on_delete=models.CASCADE, primary_key=True)
+    applicant = models.OneToOneField(
+        Applicant,
+        on_delete=models.CASCADE,
+        primary_key=True)
     posted_time = models.DateTimeField(
         _('Date published'),
         default=django.utils.timezone.now)

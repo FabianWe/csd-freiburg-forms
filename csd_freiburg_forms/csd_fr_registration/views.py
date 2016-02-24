@@ -77,7 +77,9 @@ class RegisterWizard(SessionWizardView):
             form=form,
             **kwargs)
         if self.steps.current == '0':
-            context.update({'prizing_table': self._get_prizing_table(), 'tax_string': self.get_tax_string()})
+            context.update(
+                {'prizing_table': self._get_prizing_table(),
+                 'tax_string': self.get_tax_string()})
         if self.steps.current == '4':
             articles = []
             amount = 0
@@ -175,9 +177,10 @@ class RegisterWizard(SessionWizardView):
             booth = self._create_registration(booth_form, applicant)
         accept_form = forms[nxt_form]
         accept_data = self.get_context_data(accept_form)
-        net_sum, tax, gross = accept_data['net_sum'], accept_data['tax_sum'], accept_data['gross_sum']
+        net_sum, tax, gross = accept_data['net_sum'], accept_data[
+            'tax_sum'], accept_data['gross_sum']
         self._create_posted(applicant, net_sum, tax, gross)
-        return HttpResponse('JO')
+        return render(self.request, 'csd_fr_registration/register_success.html', context={'gross_sum': gross})
 
     def _create_applicant(self, form):
         applicant = form.save(commit=False)
@@ -194,7 +197,11 @@ class RegisterWizard(SessionWizardView):
         return obj
 
     def _create_posted(self, applicant, net_sum, tax, gross):
-        posted = ApplicantPosted(applicant=applicant, net=net_sum, tax=tax, gross=gross)
+        posted = ApplicantPosted(
+            applicant=applicant,
+            net=net_sum,
+            tax=tax,
+            gross=gross)
         posted.save()
 
 

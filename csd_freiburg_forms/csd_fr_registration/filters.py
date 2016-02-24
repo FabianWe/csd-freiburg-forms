@@ -18,6 +18,7 @@
 
 from django.template.defaulttags import register
 
+
 @register.filter
 def format_euro(val):
     str_ = str(val)

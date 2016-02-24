@@ -1,0 +1,47 @@
+{# Copyright (C) 2016 Fabian Wenzelmann #}
+{# #}
+{# This file is part of csd-freiburg-forms. #}
+{# #}
+{# csd-freiburg-forms is free software: you can redistribute it and/or modify it #}
+{# under the terms of the GNU General Public License as published by the #}
+{# Free Software Foundation, either version 3 of the License, or #}
+{# (at your option) any later version. #}
+{# #}
+{# csd-freiburg-forms is distributed in the hope that it will be useful, but #}
+{# WITHOUT ANY WARRANTY; without even the implied warranty of #}
+{# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. #}
+{# See the GNU General Public License for more details. #}
+{# #}
+{# #}
+{# You should have received a copy of the GNU General Public License #}
+{# along with csd-freiburg-forms. If not, see <http://www.gnu.org/licenses/>. #}
+{# #}
+
+{% extends 'csd_fr_registration/base.html' %}
+
+{% load bootstrap3 %}
+
+{% block bootstrap3_extra_head %}
+{{ block.super }}
+{% endblock %}
+
+{% block title %}
+    Anmeldung zum CSD Freiburg - Eingangsbestätigung
+{% endblock %}
+
+{% block heading %}
+<h1>Anmeldung zum CSD Freiburg - Eingangsbestätigung</h1>
+{% endblock %}
+
+{% block content %}
+{% bootstrap_alert "Deine Anmeldung ist bei uns eingegangen." alert_type='success' %}
+<p>
+  Bitte beachte, dass Anmeldungen
+  zurückgewiesen bzw. als falsch eingestuft werden können. Du wirst von uns
+  in jedem Fall eine Mail erhalten. Erst mit Erhalt der Rechnung ist deine
+  Anmeldung akzeptiert.
+</p>
+<p>
+  Dein Rechnungsbetrag beläuft sich inkl. Steuern auf <b>{{ gross_sum|format_euro }}</b>.
+</p>
+{% endblock %}
