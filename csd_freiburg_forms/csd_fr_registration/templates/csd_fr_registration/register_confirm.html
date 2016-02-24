@@ -24,6 +24,22 @@
 {% block bootstrap3_extra_head %}
 {{ block.super }}
 {{ wizard.form.media }}
+<style type="text/css">
+table {
+  border-collapse: collapse;
+}
+td
+{
+    padding:0 15px 0 15px;
+}
+th
+{
+    padding:0 15px 0 15px;
+}
+tr.last {
+  border-top: double;
+}
+</style>
 {% endblock %}
 
 {% block title %}
@@ -42,8 +58,39 @@
   Durch das Klicken auf "Kostenpflichtig Anmelden" akzeptierst du unsere
   Teilnahmegebühren und TODO.
 </p>
+<p>
+  Deine Anmeldegebühren summieren sich inkl. Steuern auf <b>{{ gross_sum|format_euro }}</b>.
+</p>
 <h2>Deine Anmeldung im Überblick</h2>
-
+{% if articles %}
+  <table>
+    <tr>
+      <th>Menge</th>
+      <th>Bezeichnung</th>
+      <th>Preis Netto</th>
+      <th>{{ tax_string }}</th>
+      <th>ges.</th>
+    </tr>
+    {% for article, net, tax, gross in articles %}
+      <tr>
+        <td>1</td>
+        <td>{{ article }}</td>
+        <td>{{ net|format_euro }}</td>
+        <td>{{ tax|format_euro }}</td>
+        <td>{{ gross|format_euro }}</td>
+      </tr>
+    {% endfor %}
+    <tr class="last">
+      <td></td>
+      <td><b>Gesamt</b></td>
+      <td><b>{{ net_sum|format_euro }}</b></td>
+      <td><b>{{ tax_sum|format_euro }}</b></td>
+      <td><b>{{ gross_sum|format_euro }}</b></td>
+    </tr>
+  </table>
+{% else %}
+  Keine Anmeldungen vorhanden.
+{% endif %}
 <form class="form" method="POST">
   {% csrf_token %}
   {{ wizard.management_form }}

@@ -22,6 +22,7 @@ from django.http import HttpResponse
 
 from .forms import RegisterGeneralForm, VehicleForm, WalkingGroupForm, BoothForm, ConfirmForm
 from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration, ApplicantPosted, RegistrationCost
+from . import filters
 
 from formtools.wizard.views import SessionWizardView, CookieWizardView
 
@@ -80,13 +81,14 @@ class RegisterWizard(SessionWizardView):
             amount = 0
             tax_sum = 0
             for article, net, tax in self._get_articles():
-                articles.append((article, net, tax))
+                articles.append((article, net, tax, net + tax))
                 amount += net
                 tax_sum += tax
             context.update(
                 {'articles': articles,
-                 'amount': amount,
-                 'tax': tax_sum,
+                 'net_sum': amount,
+                 'tax_sum': tax_sum,
+                 'gross_sum': amount + tax_sum,
                  'tax_string': self.get_tax_string()})
         return context
 
@@ -171,8 +173,8 @@ class RegisterWizard(SessionWizardView):
             booth = self._create_registration(booth_form, applicant)
         accept_form = forms[nxt_form]
         accept_data = self.get_context_data(accept_form)
-        amount, tax = accept_data['amount'], accept_data['tax']
-        self._create_posted(applicant, amount, tax)
+        net_sum, tax, gross = accept_data['net_sum'], accept_data['tax_sum'], accept_data['gross_sum']
+        self._create_posted(applicant, net_sum, tax, gross)
         return HttpResponse('JO')
 
     def _create_applicant(self, form):
@@ -189,8 +191,8 @@ class RegisterWizard(SessionWizardView):
         form.save_m2m()
         return obj
 
-    def _create_posted(self, applicant, amount, tax):
-        posted = ApplicantPosted(applicant=applicant, amount=amount, tax=tax)
+    def _create_posted(self, applicant, net_sum, tax, gross):
+        posted = ApplicantPosted(applicant=applicant, net=net_sum, tax=tax, gross=gross)
         posted.save()
 
 

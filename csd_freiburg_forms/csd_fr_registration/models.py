@@ -136,16 +136,19 @@ class Applicant(models.Model):
 
 
 class ApplicantPosted(models.Model):
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    applicant = models.OneToOneField(Applicant, on_delete=models.CASCADE, primary_key=True)
     posted_time = models.DateTimeField(
         _('Date published'),
         default=django.utils.timezone.now)
-    amount = models.PositiveIntegerField(
-        _('Gesamtbetrag'),
-        help_text=_('Gesamtbetrag der Anmeldung'))
+    net = models.PositiveIntegerField(
+        _('Gesamtbetrag (netto)'),
+        help_text=_('Gesamtbetrag (netto) der Anmeldung'))
     tax = models.PositiveIntegerField(
         _('Summe der Steuern'),
         help_text=_('Steuern für die Anmeldung Anmeldung'))
+    gross = models.PositiveIntegerField(
+        _('Gesamtbetrag (brutto)'),
+        help_text=_('Gesamtbetrag (brutto) der Anmeldung'))
 
 
 class GeneralRegistration(models.Model):
