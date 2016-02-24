@@ -20,8 +20,55 @@ from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.http import HttpResponse
 
-from .forms import RegisterGeneralForm, VehicleForm, WalkingGroupForm, BoothForm
+from .forms import RegisterGeneralForm, VehicleForm, WalkingGroupForm, BoothForm, ConfirmForm
 from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration
+
+from formtools.wizard.views import SessionWizardView, CookieWizardView
+
+REGISTER_FORMS = [
+    RegisterGeneralForm,
+    VehicleForm,
+    WalkingGroupForm,
+    BoothForm,
+    ConfirmForm,
+]
+
+REGISTER_TEMPLATES = {
+    '0': 'csd_fr_registration/register_general.html',
+    '1': 'csd_fr_registration/register_vehicle.html',
+    '2': 'csd_fr_registration/register_walking_group.html',
+    '3': 'csd_fr_registration/register_info_booth.html',
+    '4': 'csd_fr_registration/register_confirm.html',
+}
+
+
+def get_do_register(wizard, field_name):
+    cleaned_data = wizard.get_cleaned_data_for_step('0') or {field_name: False}
+    return cleaned_data[field_name]
+
+def do_vehicle(wizard):
+    return get_do_register(wizard, 'register_vehicle')
+
+
+def do_walking_group(wizard):
+    return get_do_register(wizard, 'register_walking_group')
+
+def do_info_booth(wizard):
+    return get_do_register(wizard, 'register_info_booth')
+
+class RegisterWizard(SessionWizardView):
+    form_list = REGISTER_FORMS
+    condition_dict = {'1': do_vehicle, '2': do_walking_group, '3': do_info_booth}
+
+
+    def get_template_names(self):
+        return [REGISTER_TEMPLATES[self.steps.current]]
+
+
+    def done(self, form_list, **kwargs):
+        data = [form.cleaned_data for form in form_list]
+        
+        return HttpResponse('JO')
 
 class RegisterGenerelView16(FormView):
     model = Applicant

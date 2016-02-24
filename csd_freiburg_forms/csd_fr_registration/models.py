@@ -17,6 +17,7 @@
 #
 
 from django.db import models
+import django.utils
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 
 # Create your models here.
@@ -76,6 +77,10 @@ class Applicant(models.Model):
         _('Jahr'),
         help_text=_('Jahr (4-stellig)'))
 
+
+class ApplicantPosted(models.Model):
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    posted_time = models.DateTimeField(_('Date published'), default=django.utils.timezone.now)
 
 class GeneralRegistration(models.Model):
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)

@@ -22,9 +22,9 @@ from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, In
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 
 class RegisterGeneralForm(forms.ModelForm):
-    register_vehicle = forms.BooleanField(label=_('Wagen anmelden?'))
-    register_walking_group = forms.BooleanField(label=_('Fußgruppe anmelden?'))
-    register_info_booth = forms.BooleanField(label=_('Infostand anmelden?'))
+    register_vehicle = forms.BooleanField(label=_('Wagen anmelden?'), required=False)
+    register_walking_group = forms.BooleanField(label=_('Fußgruppe anmelden?'), required=False)
+    register_info_booth = forms.BooleanField(label=_('Infostand anmelden?'), required=False)
 
     class Meta:
         model = Applicant
@@ -47,3 +47,8 @@ class BoothForm(forms.ModelForm):
     class Meta:
         model = InfoBoothRegistration
         exclude = ['applicant']
+
+
+class ConfirmForm(forms.Form):
+    conditions_of_participation = forms.BooleanField(label=_('Akzeptiere die Teilnahmebedingungen'), required=True)
+    # TODO was sonst noch so zu akzeptieren ist

@@ -36,19 +36,18 @@
 
 {% block content %}
 <p>
-  Herzlich willkommen zur Anmeldung zum CSD 2016. Bevor du deine Gruppe anmeldest,
-  lies bitte schonmal vorzeitig unsere Teilnahmebedingungen durch!
-</p>
-<p>
-  Hier nochmal ein kurzer Überblick, wer mitlaufen darf und welche Gebühren
-  möglicherweise anfallen.
+  Bitte überprüfe, ob all deine eingegebenen Daten korrekt sind, ansonsten gehe
+  bitte zurück und ändere diese!
+
+  Durch das Klicken auf "Kostenpflichtig Anmelden" akzeptierst du unsere
+  Teilnahmegebühren und TODO.
 </p>
 <form class="form" method="POST">
   {% csrf_token %}
   {{ wizard.management_form }}
   {% bootstrap_form wizard.form %}
   {% block control_buttons %}
-  {% bootstrap_button '<span class="glyphicon glyphicon-circle-arrow-right"></span> Weiter' button_type="submit" button_class="btn-primary" %}
+  {% bootstrap_button '<span class="glyphicon glyphicon-circle-arrow-right"></span> Kostenpflichtig Anmelden' button_type="submit" button_class="btn-primary" %}
   {% endblock %}
 </form>
 {% endblock %}

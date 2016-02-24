@@ -22,3 +22,7 @@ from .models import *
 
 admin.site.register(Applicant)
 admin.site.register(RegistrationCost)
+admin.site.register(ApplicantPosted)
+admin.site.register(VehicleRegistration)
+admin.site.register(WalkingGroupRegistration)
+admin.site.register(InfoBoothRegistration)
