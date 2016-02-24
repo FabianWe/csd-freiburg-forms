@@ -71,15 +71,15 @@ class RegisterWizard(SessionWizardView):
 
     def _get_car_prize(self, pt, is_association):
         if is_association:
-            return pt.car_queer
+            return pt.car_queer, pt.car_queer_tax
         else:
-            return pt.car_other
+            return pt.car_other, pt.car_other_tax
 
     def _get_truck_prize(self, pt, is_association):
         if is_association:
-            return pt.truck_queer
+            return pt.truck_queer, pt.truck_queer_tax
         else:
-            return pt.truck_other
+            return pt.truck_other, pt.truck_other_tax
 
     def _get_vehicle_prize(self, vehicle, pt, is_association):
         if vehicle.is_car:
@@ -89,16 +89,16 @@ class RegisterWizard(SessionWizardView):
 
     def _get_walking_group_prize(self, group, pt, is_association):
         if group.music:
-            return pt.walking_group_music
+            return pt.walking_group_music, pt.walking_group_music_tax
         else:
-            return pt.walking_group_no_music
+            return pt.walking_group_no_music, pt.walking_group_no_music_tax
 
 
     def _get_booth_prize(self, booth, pt, is_association):
         if is_association:
-            return pt.info_booth_queer
+            return pt.info_booth_queer, pt.info_booth_queer_tax
         else:
-            return pt.info_booth_other
+            return pt.info_booth_other, pt.info_booth_other_tax
 
     def done(self, form_list, **kwargs):
         forms = list(form_list)
@@ -108,22 +108,29 @@ class RegisterWizard(SessionWizardView):
         nxt_form = 1
         prizing_table = self._get_prizing_table()
         amount = 0
+        tax_sum = 0
         if do_vehicle(self):
             vehicle_form = forms[nxt_form]
             nxt_form += 1
             vehicle = self._create_registration(vehicle_form, applicant)
-            amount += self._get_vehicle_prize(vehicle, prizing_table, is_association)
+            net, tax = self._get_vehicle_prize(vehicle, prizing_table, is_association)
+            amount += net
+            tax_sum += tax
         if do_walking_group(self):
             walking_form = forms[nxt_form]
             nxt_form += 1
             walking = self._create_registration(walking_form, applicant)
-            amount += self._get_walking_group_prize(walking, prizing_table, is_association)
+            net, tax =  self._get_walking_group_prize(walking, prizing_table, is_association)
+            amount += net
+            tax_sum += tax
         if do_info_booth(self):
             booth_form = forms[nxt_form]
             nxt_form += 1
             booth = self._create_registration(booth_form, applicant)
-            amount += self._get_booth_prize(booth, prizing_table, is_association)
-        self._create_posted(applicant, amount)
+            net, tax = self._get_booth_prize(booth, prizing_table, is_association)
+            amount += net
+            tax_sum += tax
+        self._create_posted(applicant, amount, tax_sum)
         return HttpResponse('JO')
 
     def _create_applicant(self, form):
@@ -141,8 +148,8 @@ class RegisterWizard(SessionWizardView):
         form.save_m2m()
         return obj
 
-    def _create_posted(self, applicant, amount):
-        posted = ApplicantPosted(applicant=applicant, amount=amount)
+    def _create_posted(self, applicant, amount, tax):
+        posted = ApplicantPosted(applicant=applicant, amount=amount, tax=tax)
         posted.save()
 
 class RegisterWizard16(RegisterWizard):

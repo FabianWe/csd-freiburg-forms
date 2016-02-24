@@ -30,20 +30,36 @@ class RegistrationCost(models.Model):
         primary_key=True)
     car_queer = models.PositiveIntegerField(
         _('Preis Auto queere Gruppen'))
+    car_queer_tax = models.PositiveIntegerField(
+        _('Steuer Auto queere Gruppen'))
     car_other = models.PositiveIntegerField(
         _('Preis Auto Sonstige'))
+    car_other_tax = models.PositiveIntegerField(
+        _('Steuer Auto Sonstige'))
     truck_queer = models.PositiveIntegerField(
         _('Preis LKW queere Gruppen'))
+    truck_queer_tax = models.PositiveIntegerField(
+        _('Steuer LKW queere Gruppen'))
     truck_other = models.PositiveIntegerField(
         _('Preis LKW Sonstige'))
+    truck_other_tax = models.PositiveIntegerField(
+        _('Steuer LKW Sonstige'))
     walking_group_no_music = models.PositiveIntegerField(
         _('Preis Fußgruppen ohne Musik'))
+    walking_group_no_music_tax = models.PositiveIntegerField(
+        _('Steuer Fußgruppen ohne Musik'))
     walking_group_music = models.PositiveIntegerField(
         _('Preis Fußgruppen mit Musik'))
+    walking_group_music_tax = models.PositiveIntegerField(
+        _('Steuer Fußgruppen mit Musik'))
     info_booth_queer = models.PositiveIntegerField(
         _('Preis Infostand queere Gruppen'))
+    info_booth_queer_tax = models.PositiveIntegerField(
+        _('Steuer Infostand queere Gruppen'))
     info_booth_other = models.PositiveIntegerField(
         _('Preis Infostand Sonstige'))
+    info_booth_other_tax = models.PositiveIntegerField(
+        _('Steuer Infostand Sonstige'))
 
 class Applicant(models.Model):
     organisation = models.CharField(
@@ -84,6 +100,9 @@ class ApplicantPosted(models.Model):
     amount = models.PositiveIntegerField(
         _('Gesamtbetrag'),
         help_text=_('Gesamtbetrag der Anmeldung'))
+    tax = models.PositiveIntegerField(
+        _('Summe der Steuern'),
+        help_text=_('Steuern für die Anmeldung Anmeldung'))
 
 class GeneralRegistration(models.Model):
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
