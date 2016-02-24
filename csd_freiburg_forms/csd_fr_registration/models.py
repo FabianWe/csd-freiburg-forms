@@ -28,34 +28,74 @@ class RegistrationCost(models.Model):
         _('Jahr'),
         help_text=_('Jahr (4-stellig)'),
         primary_key=True)
+    car_queer_txt = models.CharField(
+        _('Beschreibungstext Auto queere Gruppen'),
+        help_text=_('Artikelbeschreibung für Anzeige Auto queere Gruppen'),
+        max_length=100,
+        default='PKW queere* Gruppen')
     car_queer = models.PositiveIntegerField(
         _('Preis Auto queere Gruppen'))
     car_queer_tax = models.PositiveIntegerField(
         _('Steuer Auto queere Gruppen'))
+    car_other_txt = models.CharField(
+        _('Beschreibungstext Auto Sonstige'),
+        help_text=_('Artikelbeschreibung für Anzeige Auto Sonstige'),
+        max_length=100,
+        default='PKW queere* Unternehmen, sonstige Gruppen')
     car_other = models.PositiveIntegerField(
         _('Preis Auto Sonstige'))
     car_other_tax = models.PositiveIntegerField(
         _('Steuer Auto Sonstige'))
+    truck_queer_txt = models.CharField(
+        _('Beschreibungstext LKW queere Gruppen'),
+        help_text=_('Artikelbeschreibung für Anzeige LKW queere Gruppen'),
+        max_length=100,
+        default='LKW queere* Gruppen')
     truck_queer = models.PositiveIntegerField(
         _('Preis LKW queere Gruppen'))
     truck_queer_tax = models.PositiveIntegerField(
         _('Steuer LKW queere Gruppen'))
+    truck_other_txt = models.CharField(
+        _('Beschreibungstext LKW Sonstige'),
+        help_text=_('Artikelbeschreibung für Anzeige LKW Sonstige'),
+        max_length=100,
+        default='LKW queere* Unternehmen, sonstige Gruppen')
     truck_other = models.PositiveIntegerField(
         _('Preis LKW Sonstige'))
     truck_other_tax = models.PositiveIntegerField(
         _('Steuer LKW Sonstige'))
+    walking_group_no_music_txt = models.CharField(
+        _('Beschreibungstext Fußgruppen ohne Musik'),
+        help_text=_('Artikelbeschreibung für Anzeige Fußgruppen ohne Musik'),
+        max_length=100,
+        default='Fußgruppe ohne Musik')
     walking_group_no_music = models.PositiveIntegerField(
         _('Preis Fußgruppen ohne Musik'))
     walking_group_no_music_tax = models.PositiveIntegerField(
         _('Steuer Fußgruppen ohne Musik'))
+    walking_group_music_txt = models.CharField(
+        _('Beschreibungstext Fußgruppen mit Musik'),
+        help_text=_('Artikelbeschreibung für Anzeige Fußgruppen mit Musik'),
+        max_length=100,
+        default='Fußgruppe mit Musik')
     walking_group_music = models.PositiveIntegerField(
         _('Preis Fußgruppen mit Musik'))
     walking_group_music_tax = models.PositiveIntegerField(
         _('Steuer Fußgruppen mit Musik'))
+    info_booth_queer_txt = models.CharField(
+        _('Beschreibungstext Infostand queere Gruppen'),
+        help_text=_('Artikelbeschreibung für Infostand queere Gruppen'),
+        max_length=100,
+        default='Infostand queere* Gruppen')
     info_booth_queer = models.PositiveIntegerField(
         _('Preis Infostand queere Gruppen'))
     info_booth_queer_tax = models.PositiveIntegerField(
         _('Steuer Infostand queere Gruppen'))
+    info_booth_other_txt = models.CharField(
+        _('Beschreibungstext Infostand Sonstige'),
+        help_text=_('Artikelbeschreibung für Infostand Sonstige'),
+        max_length=100,
+        default='Infostand queere* Unternehmen, sonstige Gruppen')
     info_booth_other = models.PositiveIntegerField(
         _('Preis Infostand Sonstige'))
     info_booth_other_tax = models.PositiveIntegerField(
