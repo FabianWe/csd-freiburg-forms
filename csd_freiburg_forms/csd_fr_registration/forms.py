@@ -23,9 +23,15 @@ from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, In
 
 
 class RegisterGeneralForm(forms.ModelForm):
-    register_vehicle = forms.BooleanField(label=_('Wagen anmelden?'), required=False)
-    register_walking_group = forms.BooleanField(label=_('Fußgruppe anmelden?'), required=False)
-    register_info_booth = forms.BooleanField(label=_('Infostand anmelden?'), required=False)
+    register_vehicle = forms.BooleanField(
+        label=_('Wagen anmelden?'),
+        required=False)
+    register_walking_group = forms.BooleanField(
+        label=_('Fußgruppe anmelden?'),
+        required=False)
+    register_info_booth = forms.BooleanField(
+        label=_('Infostand anmelden?'),
+        required=False)
 
     class Meta:
         model = Applicant
@@ -33,23 +39,28 @@ class RegisterGeneralForm(forms.ModelForm):
 
 
 class VehicleForm(forms.ModelForm):
+
     class Meta:
         model = VehicleRegistration
         exclude = ['applicant']
 
 
 class WalkingGroupForm(forms.ModelForm):
+
     class Meta:
         model = WalkingGroupRegistration
         exclude = ['applicant']
 
 
 class BoothForm(forms.ModelForm):
+
     class Meta:
         model = InfoBoothRegistration
         exclude = ['applicant']
 
 
 class ConfirmForm(forms.Form):
-    conditions_of_participation = forms.BooleanField(label=_('Akzeptiere die Teilnahmebedingungen'), required=True)
+    conditions_of_participation = forms.BooleanField(
+        label=_('Akzeptiere die Teilnahmebedingungen'),
+        required=True)
     # TODO was sonst noch so zu akzeptieren ist

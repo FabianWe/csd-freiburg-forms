@@ -61,6 +61,7 @@ class RegistrationCost(models.Model):
     info_booth_other_tax = models.PositiveIntegerField(
         _('Steuer Infostand Sonstige'))
 
+
 class Applicant(models.Model):
     organisation = models.CharField(
         _('Organisation'),
@@ -96,7 +97,9 @@ class Applicant(models.Model):
 
 class ApplicantPosted(models.Model):
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
-    posted_time = models.DateTimeField(_('Date published'), default=django.utils.timezone.now)
+    posted_time = models.DateTimeField(
+        _('Date published'),
+        default=django.utils.timezone.now)
     amount = models.PositiveIntegerField(
         _('Gesamtbetrag'),
         help_text=_('Gesamtbetrag der Anmeldung'))
@@ -104,8 +107,10 @@ class ApplicantPosted(models.Model):
         _('Summe der Steuern'),
         help_text=_('Steuern für die Anmeldung Anmeldung'))
 
+
 class GeneralRegistration(models.Model):
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+
 
 class VehicleRegistration(GeneralRegistration):
     is_car = models.BooleanField(
