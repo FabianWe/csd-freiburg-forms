@@ -70,10 +70,53 @@ class RegisterWizard(SessionWizardView):
         return [REGISTER_TEMPLATES[self.steps.current]]
 
     def get_context_data(self, form, **kwargs):
-        context = super(RegisterWizard, self).get_context_data(form=form, **kwargs)
+        context = super(
+            RegisterWizard,
+            self).get_context_data(
+            form=form,
+            **kwargs)
         if self.steps.current == '4':
-            pass # TODO add the prizing to the context for display
+            articles = []
+            amount = 0
+            tax_sum = 0
+            for article, net, tax in self._get_articles():
+                articles.append((article, net, tax))
+                amount += net
+                tax_sum += tax
+            context.update(
+                {'articles': articles,
+                 'amount': amount,
+                 'tax': tax_sum,
+                 'tax_string': self.get_tax_string()})
         return context
+
+    def _get_is_association(self):
+        cleaned_data = self.get_cleaned_data_for_step(
+            '0') or {'is_association': False}
+        return cleaned_data['is_association']
+
+    def _get_is_car(self):
+        cleaned_data = self.get_cleaned_data_for_step('1') or {'is_car': False}
+        return cleaned_data['is_car']
+
+    def _get_is_music(self):
+        cleaned_data = self.get_cleaned_data_for_step('2') or {'music': False}
+        return cleaned_data['music']
+
+    def _get_articles(self):
+        is_association = self._get_is_association()
+        prizing_table = self._get_prizing_table()
+        if do_vehicle(self):
+            is_car = self._get_is_car()
+            yield self._get_vehicle_prize(
+                prizing_table, is_car, is_association)
+        if do_walking_group(self):
+            music = self._get_is_music()
+            yield self._get_walking_group_prize(
+                prizing_table, music, is_association)
+        if do_info_booth(self):
+            yield self._get_booth_prize(
+                prizing_table, is_association)
 
     def _get_prizing_table(self):
         year = self.get_year()
@@ -81,68 +124,55 @@ class RegisterWizard(SessionWizardView):
 
     def _get_car_prize(self, pt, is_association):
         if is_association:
-            return pt.car_queer, pt.car_queer_tax
+            return pt.car_queer_txt, pt.car_queer, pt.car_queer_tax
         else:
-            return pt.car_other, pt.car_other_tax
+            return pt.car_other_txt, pt.car_other, pt.car_other_tax
 
     def _get_truck_prize(self, pt, is_association):
         if is_association:
-            return pt.truck_queer, pt.truck_queer_tax
+            return pt.truck_queer_txt, pt.truck_queer, pt.truck_queer_tax
         else:
-            return pt.truck_other, pt.truck_other_tax
+            return pt.truck_other_txt, pt.truck_other, pt.truck_other_tax
 
-    def _get_vehicle_prize(self, vehicle, pt, is_association):
-        if vehicle.is_car:
+    def _get_vehicle_prize(self, pt, is_car, is_association):
+        if is_car:
             return self._get_car_prize(pt, is_association)
         else:
             return self._get_truck_prize(pt, is_association)
 
-    def _get_walking_group_prize(self, group, pt, is_association):
-        if group.music:
-            return pt.walking_group_music, pt.walking_group_music_tax
+    def _get_walking_group_prize(self, pt, music, is_association):
+        if music:
+            return pt.walking_group_music_txt, pt.walking_group_music, pt.walking_group_music_tax
         else:
-            return pt.walking_group_no_music, pt.walking_group_no_music_tax
+            return pt.walking_group_no_music_txt, pt.walking_group_no_music, pt.walking_group_no_music_tax
 
-    def _get_booth_prize(self, booth, pt, is_association):
+    def _get_booth_prize(self, pt, is_association):
         if is_association:
-            return pt.info_booth_queer, pt.info_booth_queer_tax
+            return pt.info_booth_queer_txt, pt.info_booth_queer, pt.info_booth_queer_tax
         else:
-            return pt.info_booth_other, pt.info_booth_other_tax
+            return pt.info_booth_other_txt, pt.info_booth_other, pt.info_booth_other_tax
 
     def done(self, form_list, **kwargs):
         forms = list(form_list)
         data = [form.cleaned_data for form in forms]
         applicant = self._create_applicant(forms[0])
-        is_association = applicant.is_association
         nxt_form = 1
-        prizing_table = self._get_prizing_table()
-        amount = 0
-        tax_sum = 0
         if do_vehicle(self):
             vehicle_form = forms[nxt_form]
             nxt_form += 1
             vehicle = self._create_registration(vehicle_form, applicant)
-            net, tax = self._get_vehicle_prize(
-                vehicle, prizing_table, is_association)
-            amount += net
-            tax_sum += tax
         if do_walking_group(self):
             walking_form = forms[nxt_form]
             nxt_form += 1
             walking = self._create_registration(walking_form, applicant)
-            net, tax = self._get_walking_group_prize(
-                walking, prizing_table, is_association)
-            amount += net
-            tax_sum += tax
         if do_info_booth(self):
             booth_form = forms[nxt_form]
             nxt_form += 1
             booth = self._create_registration(booth_form, applicant)
-            net, tax = self._get_booth_prize(
-                booth, prizing_table, is_association)
-            amount += net
-            tax_sum += tax
-        self._create_posted(applicant, amount, tax_sum)
+        accept_form = forms[nxt_form]
+        accept_data = self.get_context_data(accept_form)
+        amount, tax = accept_data['amount'], accept_data['tax']
+        self._create_posted(applicant, amount, tax)
         return HttpResponse('JO')
 
     def _create_applicant(self, form):
@@ -168,6 +198,9 @@ class RegisterWizard16(RegisterWizard):
 
     def get_year(self):
         return 2016
+
+    def get_tax_string(self):
+        return 'USt. 19%'
 
 
 class RegisterGenerelView16(FormView):
