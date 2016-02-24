@@ -17,9 +17,10 @@
 #
 
 from django import forms
+from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 
 from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration
-from django.utils.translation import ugettext_lazy as _, ungettext_lazy
+
 
 class RegisterGeneralForm(forms.ModelForm):
     register_vehicle = forms.BooleanField(label=_('Wagen anmelden?'), required=False)

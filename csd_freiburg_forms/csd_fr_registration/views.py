@@ -21,7 +21,7 @@ from django.views.generic.edit import FormView
 from django.http import HttpResponse
 
 from .forms import RegisterGeneralForm, VehicleForm, WalkingGroupForm, BoothForm, ConfirmForm
-from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration
+from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration, ApplicantPosted, RegistrationCost
 
 from formtools.wizard.views import SessionWizardView, CookieWizardView
 
@@ -65,10 +65,89 @@ class RegisterWizard(SessionWizardView):
         return [REGISTER_TEMPLATES[self.steps.current]]
 
 
+    def _get_prizing_table(self):
+        year = self.get_year()
+        return RegistrationCost.objects.get(pk=year)
+
+    def _get_car_prize(self, pt, is_association):
+        if is_association:
+            return pt.car_queer
+        else:
+            return pt.car_other
+
+    def _get_truck_prize(self, pt, is_association):
+        if is_association:
+            return pt.truck_queer
+        else:
+            return pt.truck_other
+
+    def _get_vehicle_prize(self, vehicle, pt, is_association):
+        if vehicle.is_car:
+            return self._get_car_prize(pt, is_association)
+        else:
+            return self._get_truck_prize(pt, is_association)
+
+    def _get_walking_group_prize(self, group, pt, is_association):
+        if group.music:
+            return pt.walking_group_music
+        else:
+            return pt.walking_group_no_music
+
+
+    def _get_booth_prize(self, booth, pt, is_association):
+        if is_association:
+            return pt.info_booth_queer
+        else:
+            return pt.info_booth_other
+
     def done(self, form_list, **kwargs):
-        data = [form.cleaned_data for form in form_list]
-        
+        forms = list(form_list)
+        data = [form.cleaned_data for form in forms]
+        applicant = self._create_applicant(forms[0])
+        is_association = applicant.is_association
+        nxt_form = 1
+        prizing_table = self._get_prizing_table()
+        amount = 0
+        if do_vehicle(self):
+            vehicle_form = forms[nxt_form]
+            nxt_form += 1
+            vehicle = self._create_registration(vehicle_form, applicant)
+            amount += self._get_vehicle_prize(vehicle, prizing_table, is_association)
+        if do_walking_group(self):
+            walking_form = forms[nxt_form]
+            nxt_form += 1
+            walking = self._create_registration(walking_form, applicant)
+            amount += self._get_walking_group_prize(walking, prizing_table, is_association)
+        if do_info_booth(self):
+            booth_form = forms[nxt_form]
+            nxt_form += 1
+            booth = self._create_registration(booth_form, applicant)
+            amount += self._get_booth_prize(booth, prizing_table, is_association)
+        self._create_posted(applicant, amount)
         return HttpResponse('JO')
+
+    def _create_applicant(self, form):
+        applicant = form.save(commit=False)
+        applicant.year = self.get_year()
+        applicant.save()
+        form.save_m2m()
+        return applicant
+
+
+    def _create_registration(self, form, applicant):
+        obj = form.save(commit=False)
+        obj.applicant = applicant
+        obj.save()
+        form.save_m2m()
+        return obj
+
+    def _create_posted(self, applicant, amount):
+        posted = ApplicantPosted(applicant=applicant, amount=amount)
+        posted.save()
+
+class RegisterWizard16(RegisterWizard):
+    def get_year(self):
+        return 2016
 
 class RegisterGenerelView16(FormView):
     model = Applicant

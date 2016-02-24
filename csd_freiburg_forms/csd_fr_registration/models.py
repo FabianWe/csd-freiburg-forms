@@ -81,6 +81,9 @@ class Applicant(models.Model):
 class ApplicantPosted(models.Model):
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
     posted_time = models.DateTimeField(_('Date published'), default=django.utils.timezone.now)
+    amount = models.PositiveIntegerField(
+        _('Gesamtbetrag'),
+        help_text=_('Gesamtbetrag der Anmeldung'))
 
 class GeneralRegistration(models.Model):
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)

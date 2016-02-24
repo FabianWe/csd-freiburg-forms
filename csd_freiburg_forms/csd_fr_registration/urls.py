@@ -18,8 +18,8 @@
 
 from django.conf.urls import include, url
 
-from .views import RegisterGenerelView16, VehicleView16, WalkingGroupView16, BoothView16, RegisterWizard
+from .views import RegisterGenerelView16, VehicleView16, WalkingGroupView16, BoothView16, RegisterWizard16
 
 urlpatterns = [
-    url(r'^16/$', RegisterWizard.as_view(), name='new_registration'),
+    url(r'^16/$', RegisterWizard16.as_view(), name='new_registration'),
 ]
