@@ -76,6 +76,8 @@ class RegisterWizard(SessionWizardView):
             self).get_context_data(
             form=form,
             **kwargs)
+        if self.steps.current == '0':
+            context.update({'prizing_table': self._get_prizing_table(), 'tax_string': self.get_tax_string()})
         if self.steps.current == '4':
             articles = []
             amount = 0

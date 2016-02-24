@@ -24,6 +24,19 @@
 {% block bootstrap3_extra_head %}
 {{ block.super }}
 {{ wizard.form.media }}
+<style type="text/css">
+table {
+  border-collapse: collapse;
+}
+td
+{
+    padding:0 15px 0 15px;
+}
+th
+{
+    padding:0 15px 0 15px;
+}
+</style>
 {% endblock %}
 
 {% block title %}
@@ -39,10 +52,89 @@
   Herzlich willkommen zur Anmeldung zum CSD 2016. Bevor du deine Gruppe anmeldest,
   lies bitte schonmal vorzeitig unsere Teilnahmebedingungen durch!
 </p>
+<h2>Gebühren</h2>
+Für die Anmeldung fallen teilweise Gebühren an. Wir versuchen natürlich, die
+Gebühren so gering wie möglich zu halten - jedoch bezahlen wir auch sehr viele
+GEMA-Gebühren, Sanitätsdienste etc. Diese versuchen wir hiermit zumindest
+teilweise zu decken!
+
 <p>
-  Hier nochmal ein kurzer Überblick, wer mitlaufen darf und welche Gebühren
-  möglicherweise anfallen.
+  Hier Definition von queeren* Gruppen / Vereinen / Projekten
 </p>
+
+<h3>Bezahlung</h3>
+Nach dem Anmeldevorgang (auf der letzten Seite müssen die Daten mit
+"Kostenpflichtig Anmelden" bestätigt werden) schicken wir euch eine Rechnung
+an die angegebene Adresse (natürlich nicht, wenn ihr nur eine kostenlose
+Fußgruppe ohne Musik anmeldet). Die Rechnung ist innerhalb von 14 Tagen
+unter Angabe der Rechnungsnummer auf das angegebene Konto zu überweisen.
+
+<h3>Fußgruppen</h3>
+<p>
+  Fußgruppen sind kostenlos, solange keine Musik gespielt wird.
+  Wird Musik gespielt, verlangen wir eine kleine Gebühr in Höhe von
+  <b>{{ prizing_table.walking_group_music|add:prizing_table.walking_group_music_tax|format_euro }}</b>
+  (inkl. {{ tax_string }}: {{ prizing_table.walking_group_music_tax|format_euro }}).
+</p>
+
+<h3>Wagen</h3>
+Für Wagen gelten die folgenden Bestimmungen: TODO
+<table>
+  <tr>
+    <th>Bezeichnung</th>
+    <th>Preis Netto</th>
+    <th>{{ tax_string }}</th>
+    <th>Preis brutto</th>
+  </tr>
+  <tr>
+    <td>{{ prizing_table.car_queer_txt }}</td>
+    <td>{{ prizing_table.car_queer|format_euro }}</td>
+    <td>{{ prizing_table.car_queer_tax|format_euro }}</td>
+    <td>{{ prizing_table.car_queer|add:prizing_table.car_queer_tax|format_euro }}</td>
+  </tr>
+  <tr>
+    <td>{{ prizing_table.car_other_txt }}</td>
+    <td>{{ prizing_table.car_other|format_euro }}</td>
+    <td>{{ prizing_table.car_other_tax|format_euro }}</td>
+    <td>{{ prizing_table.car_other|add:prizing_table.car_other_tax|format_euro }}</td>
+  </tr>
+  <tr>
+    <td>{{ prizing_table.truck_queer_txt }}</td>
+    <td>{{ prizing_table.truck_queer|format_euro }}</td>
+    <td>{{ prizing_table.truck_queer_tax|format_euro }}</td>
+    <td>{{ prizing_table.truck_queer|add:prizing_table.truck_queer_tax|format_euro }}</td>
+  </tr>
+  <tr>
+    <td>{{ prizing_table.truck_other_txt }}</td>
+    <td>{{ prizing_table.truck_other|format_euro }}</td>
+    <td>{{ prizing_table.truck_other_tax|format_euro }}</td>
+    <td>{{ prizing_table.truck_other|add:prizing_table.truck_other_tax|format_euro }}</td>
+  </tr>
+</table>
+<h3>Infostände</h3>
+Für Infostände gelten die folgenden Bedingungen: TODO
+<table>
+  <tr>
+    <th>Bezeichnung</th>
+    <th>Preis Netto</th>
+    <th>{{ tax_string }}</th>
+    <th>Preis brutto</th>
+  </tr>
+  <tr>
+    <td>{{ prizing_table.info_booth_queer_txt }}</td>
+    <td>{{ prizing_table.info_booth_queer|format_euro }}</td>
+    <td>{{ prizing_table.info_booth_queer_tax|format_euro }}</td>
+    <td>{{ prizing_table.info_booth_queer|add:prizing_table.info_booth_queer_tax|format_euro }}</td>
+  </tr>
+  <tr>
+    <td>{{ prizing_table.info_booth_other_txt }}</td>
+    <td>{{ prizing_table.info_booth_other|format_euro }}</td>
+    <td>{{ prizing_table.info_booth_other_tax|format_euro }}</td>
+    <td>{{ prizing_table.info_booth_other|add:prizing_table.info_booth_other_tax|format_euro }}</td>
+  </tr>
+</table>
+</h3>
+<p>
 <form class="form" method="POST">
   {% csrf_token %}
   {{ wizard.management_form }}
@@ -51,4 +143,5 @@
   {% bootstrap_button '<span class="glyphicon glyphicon-circle-arrow-right"></span> Weiter' button_type="submit" button_class="btn-primary" %}
   {% endblock %}
 </form>
+</p>
 {% endblock %}
