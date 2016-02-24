@@ -20,12 +20,42 @@ from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.http import HttpResponse
 
-from .forms import RegisterGeneralForm
-from .models import Applicant
+from .forms import RegisterGeneralForm, VehicleForm, WalkingGroupForm, BoothForm
+from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration
 
 class RegisterGenerelView16(FormView):
     model = Applicant
     form_class = RegisterGeneralForm
+    template_name = "csd_fr_registration/register_general.html"
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('JO')
+
+
+class VehicleView16(FormView):
+    model = VehicleRegistration
+    form_class = VehicleForm
+    template_name = "csd_fr_registration/register_general.html"
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('JO')
+
+
+class WalkingGroupView16(FormView):
+    model = WalkingGroupRegistration
+    form_class = WalkingGroupForm
+    template_name = "csd_fr_registration/register_general.html"
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('JO')
+
+
+class BoothView16(FormView):
+    model = InfoBoothRegistration
+    form_class = BoothForm
     template_name = "csd_fr_registration/register_general.html"
 
     def form_valid(self, form):

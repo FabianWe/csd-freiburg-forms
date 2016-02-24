@@ -22,6 +22,28 @@ from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 # Create your models here.
 
 
+class RegistrationCost(models.Model):
+    year = models.PositiveIntegerField(
+        _('Jahr'),
+        help_text=_('Jahr (4-stellig)'),
+        primary_key=True)
+    car_queer = models.PositiveIntegerField(
+        _('Preis Auto queere Gruppen'))
+    car_other = models.PositiveIntegerField(
+        _('Preis Auto Sonstige'))
+    truck_queer = models.PositiveIntegerField(
+        _('Preis LKW queere Gruppen'))
+    truck_other = models.PositiveIntegerField(
+        _('Preis LKW Sonstige'))
+    walking_group_no_music = models.PositiveIntegerField(
+        _('Preis Fußgruppen ohne Musik'))
+    walking_group_music = models.PositiveIntegerField(
+        _('Preis Fußgruppen mit Musik'))
+    info_booth_queer = models.PositiveIntegerField(
+        _('Preis Infostand queere Gruppen'))
+    info_booth_other = models.PositiveIntegerField(
+        _('Preis Infostand Sonstige'))
+
 class Applicant(models.Model):
     organisation = models.CharField(
         _('Organisation'),
@@ -36,7 +58,7 @@ class Applicant(models.Model):
         max_length=100)
     street = models.CharField(
         _('Straße'),
-        help_text=_('Straße'),
+        help_text=_('Straße und Hausnummer'),
         max_length=100)
     zip_code = models.CharField(
         _('PLZ'),
@@ -50,6 +72,9 @@ class Applicant(models.Model):
     mail = models.EmailField(
         _('E-Mail'),
         help_text=_('E-Mail für weiteren Kontakt'))
+    year = models.PositiveIntegerField(
+        _('Jahr'),
+        help_text=_('Jahr (4-stellig)'))
 
 
 class VehicleRegistration(models.Model):

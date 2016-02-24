@@ -18,7 +18,7 @@
 
 from django import forms
 
-from .models import Applicant
+from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 
 class RegisterGeneralForm(forms.ModelForm):
@@ -28,4 +28,22 @@ class RegisterGeneralForm(forms.ModelForm):
 
     class Meta:
         model = Applicant
+        exclude = ['year']
+
+
+class VehicleForm(forms.ModelForm):
+    class Meta:
+        model = VehicleRegistration
+        exclude = []
+
+
+class WalkingGroupForm(forms.ModelForm):
+    class Meta:
+        model = WalkingGroupRegistration
+        exclude = []
+
+
+class BoothForm(forms.ModelForm):
+    class Meta:
+        model = InfoBoothRegistration
         exclude = []
