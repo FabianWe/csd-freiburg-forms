@@ -69,6 +69,12 @@ class RegisterWizard(SessionWizardView):
     def get_template_names(self):
         return [REGISTER_TEMPLATES[self.steps.current]]
 
+    def get_context_data(self, form, **kwargs):
+        context = super(NewPollWizard, self).get_context_data(form=form, **kwargs)
+        if self.steps.current == '4':
+            pass # TODO add the prizing to the context for display
+        return context
+
     def _get_prizing_table(self):
         year = self.get_year()
         return RegistrationCost.objects.get(pk=year)
