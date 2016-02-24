@@ -34,16 +34,16 @@ class RegisterGeneralForm(forms.ModelForm):
 class VehicleForm(forms.ModelForm):
     class Meta:
         model = VehicleRegistration
-        exclude = []
+        exclude = ['applicant']
 
 
 class WalkingGroupForm(forms.ModelForm):
     class Meta:
         model = WalkingGroupRegistration
-        exclude = []
+        exclude = ['applicant']
 
 
 class BoothForm(forms.ModelForm):
     class Meta:
         model = InfoBoothRegistration
-        exclude = []
+        exclude = ['applicant']

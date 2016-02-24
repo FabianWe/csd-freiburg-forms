@@ -77,7 +77,10 @@ class Applicant(models.Model):
         help_text=_('Jahr (4-stellig)'))
 
 
-class VehicleRegistration(models.Model):
+class GeneralRegistration(models.Model):
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+
+class VehicleRegistration(GeneralRegistration):
     is_car = models.BooleanField(
         _('Auto?'),
         help_text=_('Handelt es sich um einen PKW?'))
@@ -108,7 +111,7 @@ class VehicleRegistration(models.Model):
         blank=True)
 
 
-class WalkingGroupRegistration(models.Model):
+class WalkingGroupRegistration(GeneralRegistration):
     people = models.PositiveIntegerField(
         _('Teilnehmer*innen Anzahl'),
         help_text=_('Ungefähre Anzahl der Teilnehmer*innen'))
@@ -128,7 +131,7 @@ class WalkingGroupRegistration(models.Model):
         blank=True)
 
 
-class InfoBoothRegistration(models.Model):
+class InfoBoothRegistration(GeneralRegistration):
     subject = models.CharField(
         _('Thema'),
         help_text=_('Thema des Standes'),
