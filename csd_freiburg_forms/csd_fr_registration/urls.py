@@ -16,8 +16,10 @@
 # along with csd-freiburg-forms. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from django.contrib import admin
+from django.conf.urls import include, url
 
-from .models import *
+from .views import RegisterGenerelView16
 
-admin.site.register(Applicant)
+urlpatterns = [
+    url(r'^16/$', RegisterGenerelView16.as_view(), name='new_registration'),
+]

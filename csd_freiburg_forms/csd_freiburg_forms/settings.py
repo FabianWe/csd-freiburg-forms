@@ -50,6 +50,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'csd_fr_registration',
+    'bootstrap3',
+    'formtools',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

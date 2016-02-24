@@ -16,8 +16,16 @@
 # along with csd-freiburg-forms. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from django.contrib import admin
+from django import forms
 
-from .models import *
+from .models import Applicant
+from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 
-admin.site.register(Applicant)
+class RegisterGeneralForm(forms.ModelForm):
+    register_vehicle = forms.BooleanField(label=_('Wagen anmelden?'))
+    register_walking_group = forms.BooleanField(label=_('Fußgruppe anmelden?'))
+    register_info_booth = forms.BooleanField(label=_('Infostand anmelden?'))
+
+    class Meta:
+        model = Applicant
+        exclude = []

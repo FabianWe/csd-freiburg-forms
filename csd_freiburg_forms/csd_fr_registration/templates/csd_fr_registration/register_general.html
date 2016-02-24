@@ -1,0 +1,53 @@
+{# Copyright (C) 2016 Fabian Wenzelmann #}
+{# #}
+{# This file is part of csd-freiburg-forms. #}
+{# #}
+{# csd-freiburg-forms is free software: you can redistribute it and/or modify it #}
+{# under the terms of the GNU General Public License as published by the #}
+{# Free Software Foundation, either version 3 of the License, or #}
+{# (at your option) any later version. #}
+{# #}
+{# csd-freiburg-forms is distributed in the hope that it will be useful, but #}
+{# WITHOUT ANY WARRANTY; without even the implied warranty of #}
+{# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. #}
+{# See the GNU General Public License for more details. #}
+{# #}
+{# #}
+{# You should have received a copy of the GNU General Public License #}
+{# along with csd-freiburg-forms. If not, see <http://www.gnu.org/licenses/>. #}
+{# #}
+
+{% extends 'csd_fr_registration/base.html' %}
+
+{% load bootstrap3 %}
+
+{% block bootstrap3_extra_head %}
+{{ block.super }}
+{{ form.media }}
+{% endblock %}
+
+{% block title %}
+    Anmeldung zum CSD Freiburg
+{% endblock %}
+
+{% block heading %}
+<h1>Anmeldung zum CSD Freiburg</h1>
+{% endblock %}
+
+{% block content %}
+<p>
+  Herzlich willkommen zur Anmeldung zum CSD 2016. Bevor du deine Gruppe anmeldest,
+  lies bitte schonmal vorzeitig unsere Teilnahmebedingungen durch!
+</p>
+<p>
+  Hier nochmal ein kurzer Überblick, wer mitlaufen darf und welche Gebühren
+  möglicherweise anfallen.
+</p>
+<form class="form" method="POST">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% block control_buttons %}
+  {% bootstrap_button '<span class="glyphicon glyphicon-circle-arrow-right"></span> Weiter' button_type="submit" button_class="btn-primary" %}
+  {% endblock %}
+</form>
+{% endblock %}

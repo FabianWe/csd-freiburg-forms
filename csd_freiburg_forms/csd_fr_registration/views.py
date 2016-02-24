@@ -17,5 +17,17 @@
 #
 
 from django.shortcuts import render
+from django.views.generic.edit import FormView
+from django.http import HttpResponse
 
-# Create your views here.
+from .forms import RegisterGeneralForm
+from .models import Applicant
+
+class RegisterGenerelView16(FormView):
+    model = Applicant
+    form_class = RegisterGeneralForm
+    template_name = "csd_fr_registration/register_general.html"
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('JO')
