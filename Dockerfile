@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y python3-dev
 RUN pip install --upgrade pip
 
 ADD ./requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 ADD ./csd_freiburg_forms /code/
 
