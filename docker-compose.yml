@@ -1,0 +1,19 @@
+db:
+  image: postgres
+  volumes:
+    - ./db:/var/lib/postgresql/data
+web:
+  build: .
+  command: python -R manage.py runserver 0.0.0.0:8099
+#  command: uwsgi --ini mysite_uwsgi.ini
+  volumes:
+    - ./csd_freiburg_forms:/code
+    - ./static:/static
+  expose:
+    - "8099"
+  links:
+    - "db:db"
+  environment:
+    - DJANGO_SETTINGS_MODULE=local_settings
+    - VIRTUAL_HOST=forms.freiburg-pride.de
+    - VIRTUAL_PORT=8099
