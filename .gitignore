@@ -1,3 +1,6 @@
+# ignore local settings file
+csd_freiburg_forms/csd_freiburg_forms/local_settings.py
+
 # ignore any sqlite3 databases
 *.sqlite3
 
