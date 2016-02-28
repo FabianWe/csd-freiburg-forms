@@ -28,3 +28,8 @@ def format_euro(val):
         return '0,' + str_ + ' €'
     euro, cent = str_[:-2], str_[-2:]
     return euro + ',' + cent + ' €'
+
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key, None)

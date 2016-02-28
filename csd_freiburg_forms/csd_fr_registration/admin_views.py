@@ -38,16 +38,16 @@ def year_detail(request, year):
     year = int(year)
     # get all registrations for the given year
     applicants = Applicant.objects.filter(year=year)
+    posted_objects = ApplicantPosted.objects.filter(applicant__year=2016).order_by('posted_time')
     result = []
-    for applicant in applicants:
+    for posted in posted_objects:
+        applicant = posted.applicant
         applicant_data = {'applicant': applicant}
-        # get ApplicantPosted information
-        posted = ApplicantPosted.objects.get(applicant=applicant)
         applicant_data['posted'] = posted
         # get all registrations
         _get_registration(VehicleRegistration, 'vehicle_registration', applicant, applicant_data)
         _get_registration(WalkingGroupRegistration, 'walking_registration', applicant, applicant_data)
-        _get_registration(InfoBoothRegistration, 'boot_registration', applicant, applicant_data)
+        _get_registration(InfoBoothRegistration, 'booth_registration', applicant, applicant_data)
         result.append(applicant_data)
     context = {'year': year, 'applicants': result}
     return render(request, 'admin/csd_fr_registration/year_detail.html', context)

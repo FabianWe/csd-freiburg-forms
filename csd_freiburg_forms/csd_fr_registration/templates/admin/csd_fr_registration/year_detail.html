@@ -21,6 +21,21 @@
 
 {% load bootstrap3 %}
 
+{% block bootstrap3_extra_head %}
+{{ block.super }}
+{{ wizard.form.media }}
+<style type="text/css">
+table {
+  border-collapse: collapse;
+}
+td
+{
+    padding:0 15px 0 15px;
+    vertical-align: top;
+}
+</style>
+{% endblock %}
+
 {% block title %}
     Anmeldungen zum CSD Freiburg
 {% endblock %}
@@ -30,5 +45,161 @@
 {% endblock %}
 
 {% block content %}
-Insgesamt gibt es {{ applicants|length }} Anmeldungen.
+Insgesamt gibt es {{ applicants|length }} Anmeldungen:
+
+{% if applicants %}
+<ul>
+  {% for applicant_data in applicants %}
+    {% with applicant=applicant_data|get_item:'applicant' posted=applicant_data|get_item:'posted' %}
+      <li><a href="#registration_{{ forloop.counter }}">{{ applicant.organisation}} vom {{ posted.posted_time|date:"SHORT_DATETIME_FORMAT" }}</a></li>
+    {% endwith %}
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% for applicant_data in applicants %}
+  {% with applicant=applicant_data|get_item:'applicant' posted=applicant_data|get_item:'posted' vehicle=applicant_data|get_item:'vehicle_registration' walking=applicant_data|get_item:'walking_registration' booth=applicant_data|get_item:'booth_registration' %}
+    <a name="registration_{{ forloop.counter }}"></a>
+    <h2>Anmeldung für "{{ applicant.organisation }}"</h2>
+    <h3>Allgemeine Informationen</h3>
+    <table>
+      <tr>
+        <td>Name der Organisation</td>
+        <td>{{ applicant.organisation }}</td>
+      </tr>
+      <tr>
+        <td>Angemeldet am</td>
+        <td>{{ posted.posted_time|date:"SHORT_DATETIME_FORMAT" }}</td>
+      </tr>
+      <tr>
+        <td>Queerer* Verein / Gruppe / Organisation?</td>
+        <td>
+          {% if applicant.is_association %}
+            Ja
+          {% else %}
+            Nein
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>Verantwortliche Person</td>
+        <td>{{ applicant.person_responsible }}</td>
+      </tr>
+      <tr>
+        <td>Straße</td>
+        <td>{{ applicant.street }}</td>
+      </tr>
+      <tr>
+        <td>Ort</td>
+        <td>{{ applicant.zip_code }} {{ applicant.city }}</td>
+      </tr>
+      <tr>
+        <td>Telefonnummer</td>
+        <td>{{ applicant.phone }}</td>
+      </tr>
+      <tr>
+        <td>E-Mail</td>
+        <td>{{ applicant.mail }}</td>
+      </tr>
+    </table>
+
+    <h3>Anmeldegebühren</h3>
+    <table>
+      <tr>
+        <td>Netto</td>
+        <td>{{ posted.net|format_euro }}</td>
+      </tr>
+      <tr>
+        <td>Steuern</td>
+        <td>{{ posted.tax|format_euro }}</td>
+      </tr>
+      <tr>
+        <td>Brutto</td>
+        <td>{{ posted.gross|format_euro }}</td>
+      </tr>
+    </table>
+    <h3>Anmeldungen</h3>
+    {% if vehicle %}
+      <h4>Wagen</h4>
+      <table>
+        <tr>
+          <td>Typ</td>
+          <td>
+            {% if vehicle.is_car %}
+              Auto
+            {% else %}
+              LKW
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td>Größe</td>
+          <td>{{ vehicle.size }}</td>
+        </tr>
+        <tr>
+          <td>Technische Ausstattung</td>
+          <td>{{ vehicle.equipment }}</td>
+        </tr>
+        <tr>
+          <td>Programm</td>
+          <td>{{ vehicle.show|linebreaks }}</td>
+        </tr>
+        <tr>
+          <td>Deko</td>
+          <td>{{ vehicle.decoration|linebreaks }}</td>
+        </tr>
+        <tr>
+          <td>Sonstiges</td>
+          <td>{{ vehicle.notes|linebreaks }}</td>
+        </tr>
+      </table>
+    {% endif %}
+    {% if walking %}
+      <h4>Fußgruppe</h4>
+      <table>
+        <tr>
+          <td>Teilnehmer*innen Anzahl</td>
+          <td>{{ walking.people }}</td>
+        </tr>
+        <tr>
+          <td>Programm</td>
+          <td>{{ walking.show|linebreaks }}</td>
+        </tr>
+        <tr>
+          <td>Musik</td>
+          <td>
+            {% if walking.music %}
+              Ja
+            {% else %}
+              Nein
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td>Sonstiges</td>
+          <td>{{ walking.notes|linebreaks }}</td>
+        </tr>
+      </table>
+    {% endif %}
+
+    {% if booth %}
+      <h4>Infostand</h4>
+      <table>
+        <tr>
+          <td>Thema</td>
+          <td>{{ booth.subject }}</td>
+        </tr>
+        <tr>
+          <td>Größe</td>
+          <td>{{ booth.size }}</td>
+        </tr>
+        <tr>
+          <td>Sonstiges</td>
+          <td>{{ booth.notes|linebreaks }}</td>
+        </tr>
+      </table>
+    {% endif %}
+  {% endwith %}
+
+{% endfor %}
 {% endblock %}
