@@ -4,7 +4,8 @@ db:
     - ./db:/var/lib/postgresql/data
 web:
   build: .
-  command: python -R manage.py runserver 0.0.0.0:8099
+  # command: python -R manage.py runserver 0.0.0.0:8099
+  command: uwsgi --ini csd_freiburg_forms_uwsgi.ini
 #  command: uwsgi --ini mysite_uwsgi.ini
   volumes:
     - ./csd_freiburg_forms:/code

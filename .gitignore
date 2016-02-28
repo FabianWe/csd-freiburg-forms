@@ -7,6 +7,8 @@ csd_freiburg_forms/csd_freiburg_forms/local_settings.py
 # ignore any sqlite3 databases
 *.sqlite3
 
+# the databasefrom docker, we ignore it
+/db/
 
 # default stuff from github
 
