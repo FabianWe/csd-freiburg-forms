@@ -1,3 +1,6 @@
+# ignore the static dir, before usage collect the static files
+/static/
+
 # ignore local settings file
 csd_freiburg_forms/csd_freiburg_forms/local_settings.py
 

@@ -2,3 +2,4 @@ django-bootstrap3
 django-formtools
 psycopg2
 uwsgi
+whitenoise
