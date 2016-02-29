@@ -1,0 +1,176 @@
+{# Copyright (C) 2016 Fabian Wenzelmann #}
+{# #}
+{# This file is part of csd-freiburg-forms. #}
+{# #}
+{# csd-freiburg-forms is free software: you can redistribute it and/or modify it #}
+{# under the terms of the GNU General Public License as published by the #}
+{# Free Software Foundation, either version 3 of the License, or #}
+{# (at your option) any later version. #}
+{# #}
+{# csd-freiburg-forms is distributed in the hope that it will be useful, but #}
+{# WITHOUT ANY WARRANTY; without even the implied warranty of #}
+{# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. #}
+{# See the GNU General Public License for more details. #}
+{# #}
+{# #}
+{# You should have received a copy of the GNU General Public License #}
+{# along with csd-freiburg-forms. If not, see <http://www.gnu.org/licenses/>. #}
+{# #}
+
+{% extends 'csd_fr_registration/base.html' %}
+
+{% load bootstrap3 %}
+
+{% block bootstrap3_extra_head %}
+{{ block.super }}
+{{ wizard.form.media }}
+<style type="text/css">
+table {
+  border-collapse: collapse;
+}
+td
+{
+    padding:0 15px 0 15px;
+    vertical-align: top;
+}
+</style>
+{% endblock %}
+
+{% block title %}
+    Anmeldungen zum CSD Freiburg
+{% endblock %}
+
+{% block heading %}
+<h1>Anmeldungen zum CSD Freiburg im Jahr {{ year }}</h1>
+{% endblock %}
+
+{% block content %}
+<ul>
+  <li><a href="#registration_vehicles">Anmeldungen für Wagen</a></li>
+  <li><a href="#registration_walkings">Anmeldungen für Fußgruppen</a></li>
+  <li><a href="#registration_booths">Anmeldungen für Infostände</a></li>
+</ul>
+
+<a name="registration_vehicles"></a>
+<h2>Wagen</h2>
+<p>Insgesamt gibt es {{ vehicles|length }} Anmeldungen für Wagen.</p>
+
+{% for vehicle in vehicles %}
+{% with applicant=vehicle.applicant %}
+  <h3>Anmeldung von "{{ applicant.organisation }}"</h3>
+  <table>
+    <tr>
+      <td>Verantwortliche Person</td>
+      <td>{{ applicant.person_responsible }}</td>
+    </tr>
+    <tr>
+      <td>Telefonnummer</td>
+      <td>{{ applicant.phone }}</td>
+    </tr>
+    <tr>
+      <td>E-Mail</td>
+      <td>{{ applicant.mail }}</td>
+    </tr>
+    <tr>
+      <td>Größe</td>
+      <td>{{ vehicle.size }}</td>
+    </tr>
+    <tr>
+      <td>Technische Ausstattung</td>
+      <td>{{ vehicle.equipment }}</td>
+    </tr>
+    <tr>
+      <td>Programm</td>
+      <td>{{ vehicle.show|linebreaks }}</td>
+    </tr>
+    <tr>
+      <td>Deko</td>
+      <td>{{ vehicle.decoration|linebreaks }}</td>
+    </tr>
+    <tr>
+      <td>Sonstiges</td>
+      <td>{{ vehicle.notes|linebreaks }}</td>
+    </tr>
+  </table>
+{% endwith %}
+{% endfor %}
+
+<a name="registration_walkings"></a>
+<h2>Fußgruppen</h2>
+<p>Insgesamt gibt es {{ walkings|length }} Anmeldungen für Fußgruppen.</p>
+{% for walking in walkings %}
+{% with applicant=walking.applicant %}
+  <table>
+    <tr>
+      <td>Verantwortliche Person</td>
+      <td>{{ applicant.person_responsible }}</td>
+    </tr>
+    <tr>
+      <td>Telefonnummer</td>
+      <td>{{ applicant.phone }}</td>
+    </tr>
+    <tr>
+      <td>E-Mail</td>
+      <td>{{ applicant.mail }}</td>
+    </tr>
+    <tr>
+      <td>Teilnehmer*innen Anzahl</td>
+      <td>{{ walking.people }}</td>
+    </tr>
+    <tr>
+      <td>Programm</td>
+      <td>{{ walking.show|linebreaks }}</td>
+    </tr>
+    <tr>
+      <td>Musik</td>
+      <td>
+        {% if walking.music %}
+          Ja
+        {% else %}
+          Nein
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>Sonstiges</td>
+      <td>{{ walking.notes|linebreaks }}</td>
+    </tr>
+  </table>
+{% endwith %}
+{% endfor %}
+
+<a name="registration_booths"></a>
+<h2>Infostände</h2>
+<p>Insgesamt gibt es {{ booths|length }} Anmeldungen für Infostände.</p>
+
+{% for booth in booths %}
+{% with applicant=booth.applicant %}
+  <table>
+    <tr>
+      <td>Verantwortliche Person</td>
+      <td>{{ applicant.person_responsible }}</td>
+    </tr>
+    <tr>
+      <td>Telefonnummer</td>
+      <td>{{ applicant.phone }}</td>
+    </tr>
+    <tr>
+      <td>E-Mail</td>
+      <td>{{ applicant.mail }}</td>
+    </tr>
+    <tr>
+      <td>Thema</td>
+      <td>{{ booth.subject }}</td>
+    </tr>
+    <tr>
+      <td>Größe</td>
+      <td>{{ booth.size }}</td>
+    </tr>
+    <tr>
+      <td>Sonstiges</td>
+      <td>{{ booth.notes|linebreaks }}</td>
+    </tr>
+  </tale>
+{% endwith %}
+{% endfor %}
+{% endblock %}

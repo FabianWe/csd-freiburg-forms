@@ -34,10 +34,11 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from csd_fr_registration.admin_views import year_detail
+from csd_fr_registration.admin_views import year_detail, year_types
 
 urlpatterns = [
     url(r'^register/', include('csd_fr_registration.urls')),
     url(r'^admin/register/(\d{2}|\d{4})/$', year_detail),
+    url(r'^admin/year-types/(\d{2}|\d{4})/$', year_types),
     url(r'^admin/', admin.site.urls),
 ]

@@ -22,6 +22,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Applicant, ApplicantPosted, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration
 
+def _get_year(year):
+    if len(year) == 2:
+        year = '20' + year
+    return int(year)
+
 # we haven't defined the *Registration models not as 1:1, but however they are...
 # this helper method adds to registration object to the dictionary if the
 # registration exists
@@ -33,11 +38,8 @@ def _get_registration(registration_class, attr_name, applicant, applicant_data):
 
 @staff_member_required
 def year_detail(request, year):
-    if len(year) == 2:
-        year = '20' + year
-    year = int(year)
+    year = _get_year(year)
     # get all registrations for the given year
-    applicants = Applicant.objects.filter(year=year)
     posted_objects = ApplicantPosted.objects.filter(applicant__year=2016).order_by('posted_time')
     result = []
     for posted in posted_objects:
@@ -51,3 +53,23 @@ def year_detail(request, year):
         result.append(applicant_data)
     context = {'year': year, 'applicants': result}
     return render(request, 'admin/csd_fr_registration/year_detail.html', context)
+
+def _get_all_from_type(registration_class, applicant):
+    # get all applicants from this year
+    return registration_class.objects.filter(applicant=applicant)
+
+@staff_member_required
+def year_types(request, year):
+    year = _get_year(year)
+    posted_objects = ApplicantPosted.objects.filter(applicant__year=2016).order_by('posted_time')
+    vehicles = []
+    walkings = []
+    booths = []
+    for posted in posted_objects:
+        applicant = posted.applicant
+        # get all vehicles
+        vehicles += list(_get_all_from_type(VehicleRegistration, applicant))
+        walkings += list(_get_all_from_type(WalkingGroupRegistration, applicant))
+        booths += list(_get_all_from_type(InfoBoothRegistration, applicant))
+    context = {'year': year, 'vehicles': vehicles, 'walkings': walkings, 'booths': booths}
+    return render(request, 'admin/csd_fr_registration/year_types.html', context)
