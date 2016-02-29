@@ -23,6 +23,7 @@ from django.http import HttpResponse
 from .forms import RegisterGeneralForm, VehicleForm, WalkingGroupForm, BoothForm, ConfirmForm
 from .models import Applicant, VehicleRegistration, WalkingGroupRegistration, InfoBoothRegistration, ApplicantPosted, RegistrationCost
 from . import filters
+from .models_helper import _get_vehicle_prize, _get_walking_group_prize, _get_booth_prize
 
 from formtools.wizard.views import SessionWizardView, CookieWizardView
 
@@ -114,49 +115,19 @@ class RegisterWizard(SessionWizardView):
         prizing_table = self._get_prizing_table()
         if do_vehicle(self):
             is_car = self._get_is_car()
-            yield self._get_vehicle_prize(
+            yield _get_vehicle_prize(
                 prizing_table, is_car, is_association)
         if do_walking_group(self):
             music = self._get_is_music()
-            yield self._get_walking_group_prize(
+            yield _get_walking_group_prize(
                 prizing_table, music, is_association)
         if do_info_booth(self):
-            yield self._get_booth_prize(
+            yield _get_booth_prize(
                 prizing_table, is_association)
 
     def _get_prizing_table(self):
         year = self.get_year()
         return RegistrationCost.objects.get(pk=year)
-
-    def _get_car_prize(self, pt, is_association):
-        if is_association:
-            return pt.car_queer_txt, pt.car_queer, pt.car_queer_tax
-        else:
-            return pt.car_other_txt, pt.car_other, pt.car_other_tax
-
-    def _get_truck_prize(self, pt, is_association):
-        if is_association:
-            return pt.truck_queer_txt, pt.truck_queer, pt.truck_queer_tax
-        else:
-            return pt.truck_other_txt, pt.truck_other, pt.truck_other_tax
-
-    def _get_vehicle_prize(self, pt, is_car, is_association):
-        if is_car:
-            return self._get_car_prize(pt, is_association)
-        else:
-            return self._get_truck_prize(pt, is_association)
-
-    def _get_walking_group_prize(self, pt, music, is_association):
-        if music:
-            return pt.walking_group_music_txt, pt.walking_group_music, pt.walking_group_music_tax
-        else:
-            return pt.walking_group_no_music_txt, pt.walking_group_no_music, pt.walking_group_no_music_tax
-
-    def _get_booth_prize(self, pt, is_association):
-        if is_association:
-            return pt.info_booth_queer_txt, pt.info_booth_queer, pt.info_booth_queer_tax
-        else:
-            return pt.info_booth_other_txt, pt.info_booth_other, pt.info_booth_other_tax
 
     def done(self, form_list, **kwargs):
         forms = list(form_list)

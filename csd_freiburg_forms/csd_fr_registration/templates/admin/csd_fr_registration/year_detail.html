@@ -61,6 +61,7 @@ Insgesamt gibt es {{ applicants|length }} Anmeldungen:
   {% with applicant=applicant_data|get_item:'applicant' posted=applicant_data|get_item:'posted' vehicle=applicant_data|get_item:'vehicle_registration' walking=applicant_data|get_item:'walking_registration' booth=applicant_data|get_item:'booth_registration' %}
     <a name="registration_{{ forloop.counter }}"></a>
     <h2>Anmeldung für "{{ applicant.organisation }}"</h2>
+    <a href="{% url 'registration_invoice' applicant.id %}">Link zu den Rechnungsdaten</a>
     <h3>Allgemeine Informationen</h3>
     <table>
       <tr>
