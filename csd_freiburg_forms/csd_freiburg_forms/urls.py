@@ -38,6 +38,7 @@ from csd_fr_registration.admin_views import year_detail, year_types, json_invoic
 
 urlpatterns = [
     url(r'^register/', include('csd_fr_registration.urls')),
+    url(r'^donate/', include('donate_o_meter.urls')),
     url(r'^admin/register/(\d{2}|\d{4})/$', year_detail),
     url(r'^admin/year-types/(\d{2}|\d{4})/$', year_types),
     url(r'^admin/invoice/(-?\d+)/$', json_invoice, name='registration_invoice'),

@@ -51,6 +51,7 @@ STATIC_ROOT = "../static/"
 
 INSTALLED_APPS = [
     'csd_fr_registration',
+    'donate_o_meter',
     'bootstrap3',
     'formtools',
     'django.contrib.admin',
