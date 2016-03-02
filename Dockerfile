@@ -5,7 +5,7 @@ MAINTAINER Fabian Wenzelmann <fabianwenzelmann@posteo.de>
 ENV PYTHONUNBUFFERED 1
 
 # install all required packages
-RUN apt-get update && apt-get install -y python3-dev
+RUN apt-get update && apt-get install -y python3-dev libjpeg-dev libfreetype6-dev zlib1g-dev
 
 RUN pip install --upgrade pip
 

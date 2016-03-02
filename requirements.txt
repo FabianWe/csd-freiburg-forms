@@ -3,3 +3,4 @@ django-formtools
 psycopg2
 uwsgi
 whitenoise
+Pillow
