@@ -29,8 +29,8 @@ from .models import DonateAim
 def meter16(request):
     dir_ = os.path.dirname(os.path.realpath(__file__))
     imgs = os.path.join(dir_, 'imgs')
-    empty_path = os.path.join(imgs, 'meter_empty_16.png')
-    full_path = os.path.join(imgs, 'meter_full_16.png')
+    empty_path = os.path.join(imgs, 'sektglas.png')
+    full_path = os.path.join(imgs, 'sektglas-voll.png')
     empty = Image.open(empty_path)
     full = Image.open(full_path)
     aim = None
@@ -38,7 +38,8 @@ def meter16(request):
         aim = DonateAim.objects.get(pk=2016)
     except DonateAim.DoesNotExist as e:
         raise Http404('No DonateAim for 2016')
-    meter = DonateOMeter(empty, full, aim.aim)
+    box = 24, 0, 176, 332
+    meter = DonateOMeter(empty, full, aim.aim, box=box)
     img = meter.draw(aim.current)
     response = HttpResponse(content_type='image/png')
     img.save(response, 'PNG')

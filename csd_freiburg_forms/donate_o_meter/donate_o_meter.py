@@ -19,21 +19,40 @@
 from PIL import Image
 
 class DonateOMeter:
-    def __init__(self, background, filling, aim):
+
+    def __init__(self, background, filling, aim, box=None):
         self.background = background
         self.filling = filling
         self.aim = aim
+        if box is None:
+            width, height = background.size
+            box = (0, 0, width - 1, height - 1)
+        self.box = box
 
     def draw(self, current):
-        img = self.background.copy()
+        box = self.box
+
+        # otherwise compute the percent and crop the fill area
         percent = current / self.aim
-        if percent > 1:
-            percent = 1.0
-        width, height = self.filling.size
-        upper = height - min(int(height * percent), height)
-        if upper == height:
-            upper -= 1
-        box = (0, upper, width, height)
-        fill = self.filling.crop(box)
-        img.paste(fill, (0, upper))
+
+        width, height = self.background.size
+        mh = box[3] - box[1]
+        ch = int(mh * percent)
+        # first check if ch is zero, in this case return the background
+        if ch <= 0:
+            return self.background.copy()
+        # check if ch is the height of the box, in this case return
+        # the filling
+        if ch >= (box[3] - box[1]):
+            return self.filling.copy()
+        img = self.background.copy()
+        crop_left = box[0]
+        crop_upper = box[3] - ch
+        crop_right = box[2]
+        crop_lower = box[3]
+
+        # crop the designated area from the image
+        meter_area = self.filling.crop(
+            (crop_left, crop_upper, crop_right, crop_lower))
+        img.paste(meter_area, (crop_left, crop_upper))
         return img
