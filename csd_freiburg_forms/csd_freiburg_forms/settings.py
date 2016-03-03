@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'donate_o_meter',
     'bootstrap3',
     'formtools',
+    'django_bootstrap3_multidatepicker.django_bootstrap3_multidatepicker',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
